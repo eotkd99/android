@@ -12,10 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
-import com.example.myapplication.navigation.AlarmFragment
-import com.example.myapplication.navigation.DetailViewFragment
-import com.example.myapplication.navigation.GridFragment
-import com.example.myapplication.navigation.UserFragment
+import com.example.myapplication.navigation.*
 import com.google.android.material.bottomnavigation.*
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.firebase.auth.FirebaseAuth
@@ -71,11 +68,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 return true
             }
             R.id.action_add_photo -> {
-               /* if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+               if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     startActivity(Intent(this, AddPhotoActivity::class.java))
                 } else {
                     Toast.makeText(this, "스토리지 읽기 권한이 없습니다.", Toast.LENGTH_LONG).show()
-                }*/
+                }
                 return true
             }
             R.id.action_favorite_alarm -> {
