@@ -4,7 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/eotkd/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_login.xml" value="0.33" />
-        <entry key="..\:/Users/eotkd/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_main.xml" value="0.17603850050658562" />
+        <entry key="..\:/Users/eotkd/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/eotkd/AndroidStudioProjects/MyApplication/app/src/main/res/layout/fragment_alarm.xml" value="0.18489583333333334" />
+        <entry key="..\:/Users/eotkd/AndroidStudioProjects/MyApplication/app/src/main/res/layout/fragment_detail.xml" value="0.18489583333333334" />
+        <entry key="..\:/Users/eotkd/AndroidStudioProjects/MyApplication/app/src/main/res/layout/fragment_grid.xml" value="0.18489583333333334" />
+        <entry key="..\:/Users/eotkd/AndroidStudioProjects/MyApplication/app/src/main/res/layout/fragment_user.xml" value="0.18489583333333334" />
+        <entry key="..\:/Users/eotkd/AndroidStudioProjects/MyApplication/app/src/main/res/menu/bottom_navigation_main.xml" value="0.18385416666666668" />
       </map>
     </option>
   </component>

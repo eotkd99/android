@@ -2,24 +2,29 @@ package com.example.myapplication
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.*
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.facebook.*
 import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.auth.api.signin.*
+import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.activity_login.*
+import java.security.*
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+import java.util.*
+
 
 class LoginActivity : AppCompatActivity() {
     var auth : FirebaseAuth? = null;
     var googleSignInClient : GoogleSignInClient? = null;
     var GOOGLE_LOGIN_CODE = 9001
+    var callbackManager: CallbackManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +36,11 @@ class LoginActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+        callbackManager = CallbackManager.Factory.create()
 
         email_login_button.setOnClickListener { signinAndSignup() }
         google_sign_in_button.setOnClickListener { googleLogin() }
+        facebook_login_button.setOnClickListener { facebookLogin() }
     }
 
     fun googleLogin(){
@@ -41,11 +48,37 @@ class LoginActivity : AppCompatActivity() {
         startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
     }
 
+    fun facebookLogin() {
+        progress_bar.visibility = View.VISIBLE
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
+        LoginManager.getInstance().registerCallback(callbackManager, object :
+            FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                handleFacebookAccessToken(loginResult.accessToken)
+            }
+            override fun onCancel() {
+                progress_bar.visibility = View.GONE
+            }
+            override fun onError(error: FacebookException) {
+                progress_bar.visibility = View.GONE
+            }
+        })
+    }
+    fun handleFacebookAccessToken(token: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        auth?.signInWithCredential(credential)
+            ?.addOnCompleteListener { task ->
+                progress_bar.visibility = View.GONE
+                if (task.isSuccessful) {
+                    moveMainPage(auth?.currentUser)
+                }
+            }
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // 구글에서 승인된 정보를 가지고 오기
-        if (requestCode == GOOGLE_LOGIN_CODE && resultCode == Activity.RESULT_OK) {
+        callbackManager?.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == GOOGLE_LOGIN_CODE && resultCode == Activity.RESULT_OK) {
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)
             println(result?.status.toString())
             if (result!!.isSuccess) {
