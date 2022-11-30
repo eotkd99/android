@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
 
         email_login_button.setOnClickListener { signinAndSignup() }
         google_sign_in_button.setOnClickListener { googleLogin() }
-        facebook_login_button.setOnClickListener { facebookLogin() }
+        //facebook_login_button.setOnClickListener { facebookLogin() }
     }
 
     fun googleLogin(){
