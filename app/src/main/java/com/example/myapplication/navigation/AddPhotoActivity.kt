@@ -19,30 +19,26 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AddPhotoActivity : AppCompatActivity() {
-
-    val PICK_IMAGE_FROM_ALBUM = 0
-    var photoUri: Uri? = null
-    var storage: FirebaseStorage? = null
-    var firestore: FirebaseFirestore? = null
-    private var auth: FirebaseAuth? = null
-
+    var PICK_IMAGE_FROM_ALBUM = 0
+    var storage : FirebaseStorage? = null
+    var photoUri : Uri? = null
+    var auth : FirebaseAuth? = null
+    var firestore : FirebaseFirestore? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_photo)
 
+        //Initiate
         storage = FirebaseStorage.getInstance()
-        firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
 
-        val photoPickerIntent = Intent(Intent.ACTION_PICK)
+        //Open the album
+        var photoPickerIntent = Intent(Intent.ACTION_PICK)
         photoPickerIntent.type = "image/*"
-        startActivityForResult(photoPickerIntent, PICK_IMAGE_FROM_ALBUM)
+        startActivityForResult(photoPickerIntent,PICK_IMAGE_FROM_ALBUM)
 
-        addphoto_image.setOnClickListener {
-            val photoPickerIntent = Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type = "image/*"
-            startActivityForResult(photoPickerIntent, PICK_IMAGE_FROM_ALBUM)
-        }
+        //add image upload event
         addphoto_btn_upload.setOnClickListener {
             contentUpload()
         }
@@ -52,36 +48,52 @@ class AddPhotoActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == PICK_IMAGE_FROM_ALBUM){
             if(resultCode == Activity.RESULT_OK){
+                //This is path to the selected image
                 photoUri = data?.data
                 addphoto_image.setImageURI(photoUri)
+
             }else{
+                //Exit the addPhotoActivity if you leave the album without selecting it
                 finish()
+
             }
         }
     }
-
     fun contentUpload(){
-        progress_bar.visibility = View.VISIBLE
+        //Make filename
 
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName = "JPEG_" + timeStamp + "_.png"
+        var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        var imageFileName = "IMAGE_" + timestamp + "_.png"
 
-        val storageRef = storage?.reference?.child("images")?.child(imageFileName)
+        var storageRef = storage?.reference?.child("images")?.child(imageFileName)
 
+        //Promise method
         storageRef?.putFile(photoUri!!)?.continueWithTask { task: com.google.android.gms.tasks.Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
-        }?.addOnSuccessListener { url ->
-            val contentDTO = ContentDTO()
+        }?.addOnSuccessListener { uri ->
+            var contentDTO = ContentDTO()
 
-            contentDTO.imageUrl = url!!.toString()
+            //Insert downloadUrl of image
+            contentDTO.imageUrl = uri.toString()
+
+            //Insert uid of user
             contentDTO.uid = auth?.currentUser?.uid
-            contentDTO.explain = addphoto_edit_explain.text.toString()
+
+            //Insert userId
             contentDTO.userId = auth?.currentUser?.email
+
+            //Insert explain of content
+            contentDTO.explain = addphoto_edit_explain.text.toString()
+
+            //Insert timestamp
             contentDTO.timestamp = System.currentTimeMillis()
 
             firestore?.collection("images")?.document()?.set(contentDTO)
+
             setResult(Activity.RESULT_OK)
+
             finish()
         }
     }
 }
+
