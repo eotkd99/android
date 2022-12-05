@@ -20,6 +20,7 @@ import com.example.myapplication.R
 import com.example.myapplication.model.AlarmDTO
 import com.example.myapplication.model.ContentDTO
 import com.example.myapplication.model.FollowDTO
+import com.example.myapplication.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
@@ -168,7 +169,7 @@ class UserFragment : Fragment(){
         FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
         var message = auth?.currentUser?.email + getString(R.string.alarm_follow)
-       // FcmPush.instance.sendMessage(destinationUid,"Howlstagram",message)
+        FcmPush.instance.sendMessage(destinationUid,"EveryDay",message)
     }
     fun getProfileImage(){
         firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
