@@ -22,13 +22,14 @@
             android:background="@color/colorDivision"
             android:layout_width="match_parent"
             android:layout_height="1dp"></LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="30dp"
-            android:layout_below="@+id/toolbar_division"
-            android:id="@+id/comment_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+        android:id="@+id/comment_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_division"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="30dp"></androidx.recyclerview.widget.RecyclerView>
     <Button
             android:id="@+id/comment_btn_send"
             android:layout_alignParentRight="true"

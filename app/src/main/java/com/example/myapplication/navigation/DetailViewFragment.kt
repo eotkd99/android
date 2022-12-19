@@ -5,16 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.myapplication.R
 import com.example.myapplication.model.*
 import com.example.myapplication.util.FcmPush
 import kotlinx.android.synthetic.main.fragment_detail.view.*
+import kotlinx.android.synthetic.main.item_comment.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
 class DetailViewFragment : Fragment(){
@@ -34,8 +37,6 @@ class DetailViewFragment : Fragment(){
         var contentUidList : ArrayList<String> = arrayListOf()
 
         init {
-
-
             firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 contentDTOs.clear()
                 contentUidList.clear()
@@ -81,7 +82,6 @@ class DetailViewFragment : Fragment(){
             viewholder.detailviewitem_favorite_imageview.setOnClickListener {
                 favoriteEvent(p1)
             }
-
             //This code is when the page is loaded
             if(contentDTOs!![p1].favorites.containsKey(uid)){
                 //This is like status
@@ -128,7 +128,6 @@ class DetailViewFragment : Fragment(){
                 }
                 transaction.set(tsDoc,contentDTO)
             }
-
         }
         fun favoriteAlarm(destinationUid : String){
             var alarmDTO = AlarmDTO()
@@ -140,7 +139,7 @@ class DetailViewFragment : Fragment(){
             FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
             var message = FirebaseAuth.getInstance()?.currentUser?.email + getString(R.string.alarm_favorite)
-            FcmPush.instance.sendMessage(destinationUid,"EveryDay",message)
+            FcmPush.instance.sendMessage(destinationUid,"Howlstagram",message)
         }
 
     }

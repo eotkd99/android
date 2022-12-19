@@ -20,11 +20,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
     </LinearLayout>
+
     <ImageView
-            android:id="@+id/detailviewitem_imageview_content"
-            android:scaleType="fitXY"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"/>
+        android:id="@+id/detailviewitem_imageview_content"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:scaleType="fitXY" />
     <LinearLayout
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
